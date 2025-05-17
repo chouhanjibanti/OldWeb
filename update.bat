@@ -1,0 +1,3 @@
+@echo off
+powershell -Command "$content = Get-Content Machine_Learning.html; $result = @(); $skip = 0; foreach ($line in $content) { if ($line.Contains('script.js') -or $line.Contains('Added script.js')) { if ($skip -eq 0) { $result += '    <!-- Direct accordion fix script -->'; $result += '    <script src=\"./assets/JS/direct-accordion-fix.js\"></script>'; $skip = 1; } } else { $result += $line; } } $result | Set-Content Machine_Learning.html"
+echo Done! 

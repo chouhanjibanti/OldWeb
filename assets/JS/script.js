@@ -45,51 +45,49 @@ setInterval(rotateText, 4000);
 
 // Accordion Code : 
 document.addEventListener('DOMContentLoaded', function() {
-  // Remove the previous accordion event listeners which were causing issues
-  const accordionButtons = document.querySelectorAll('.accordion-button');
-  
-  // Add event listeners to each accordion button to prevent the default Bootstrap behavior
-  // that was causing the accordion to open and immediately close
-  accordionButtons.forEach(button => {
-    button.addEventListener('click', function(e) {
-      // Prevent event bubbling which could cause immediate collapse
-      e.stopPropagation();
-      
-      // Get the target collapse element
-      const target = document.querySelector(button.getAttribute('data-bs-target'));
-      
-      // If the target exists, toggle its state
-      if (target) {
-        // Check if this collapse is already open
-        const isOpen = target.classList.contains('show');
+  // Simple and direct implementation for accordion functionality
+  setTimeout(function() {
+    const accordionButtons = document.querySelectorAll('.accordion-button');
+    
+    accordionButtons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        // Prevent the default Bootstrap behavior immediately
+        e.preventDefault();
+        e.stopPropagation();
         
-        // Close all other accordion items first if we're opening this one
-        if (!isOpen) {
-          // Find all open accordion items in this accordion group
-          const parent = button.closest('.accordion');
-          if (parent) {
-            const openItems = parent.querySelectorAll('.accordion-collapse.show');
-            openItems.forEach(item => {
-              if (item.id !== target.id) {
-                item.classList.remove('show');
-                // Also update the associated button's aria-expanded attribute
-                const associatedButton = parent.querySelector(`[data-bs-target="#${item.id}"]`);
-                if (associatedButton) {
-                  associatedButton.setAttribute('aria-expanded', 'false');
-                  associatedButton.classList.add('collapsed');
-                }
-              }
-            });
+        // Get the collapse element
+        const targetId = this.getAttribute('data-bs-target');
+        const target = document.querySelector(targetId);
+        
+        if (target) {
+          // Toggle the collapse state
+          if (target.classList.contains('show')) {
+            target.classList.remove('show');
+            this.classList.add('collapsed');
+            this.setAttribute('aria-expanded', 'false');
+          } else {
+            // Optional: close other open items in the same accordion
+            const parent = this.closest('.accordion');
+            if (parent) {
+              const openItems = parent.querySelectorAll('.accordion-collapse.show');
+              const expandedButtons = parent.querySelectorAll('.accordion-button:not(.collapsed)');
+              
+              openItems.forEach(item => item.classList.remove('show'));
+              expandedButtons.forEach(btn => {
+                btn.classList.add('collapsed');
+                btn.setAttribute('aria-expanded', 'false');
+              });
+            }
+            
+            // Open this item
+            target.classList.add('show');
+            this.classList.remove('collapsed');
+            this.setAttribute('aria-expanded', 'true');
           }
         }
-        
-        // Toggle this item
-        target.classList.toggle('show');
-        button.setAttribute('aria-expanded', !isOpen);
-        button.classList.toggle('collapsed', isOpen);
-      }
+      }, true); // Use capture phase to ensure this runs before Bootstrap's handler
     });
-  });
+  }, 100); // Small delay to ensure DOM is fully loaded
 });
 
 

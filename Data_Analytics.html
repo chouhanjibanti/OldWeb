@@ -1917,6 +1917,10 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="https://kit.fontawesome.com/08f89c1702.js" crossorigin="anonymous"></script>
+  
+  <!-- Direct accordion fix script -->
+  <script src="./assets/JS/direct-accordion-fix.js"></script>
+  
   <script>
     let curri_sec = document.getElementById("curri_sec");
     let close_dld = document.getElementById("cross-mark");
@@ -1931,18 +1935,17 @@
       const seeMoreBtn = document.getElementById('seeMoreBtn');
       const hiddenModules = document.querySelectorAll('.hidden-module');
       
-      seeMoreBtn.addEventListener('click', function() {
-        hiddenModules.forEach(module => {
-          module.classList.add('show-module');
+      if (seeMoreBtn && hiddenModules.length > 0) {
+        seeMoreBtn.addEventListener('click', function() {
+          hiddenModules.forEach(module => {
+            module.classList.add('show-module');
+          });
+          
+          // Hide the button after clicking
+          seeMoreBtn.style.display = 'none';
         });
-        
-        // Hide the button after clicking
-        seeMoreBtn.style.display = 'none';
-      });
+      }
     });
   </script>
-
-  <!-- Added script.js for accordion functionality -->
-  <script src="./assets/JS/script.js"></script>
   </body>
 </html>
